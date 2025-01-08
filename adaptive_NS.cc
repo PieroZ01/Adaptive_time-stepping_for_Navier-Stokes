@@ -89,7 +89,6 @@ namespace Step35
 
       bool         verbose;
       unsigned int output_interval;
-      bool         norm;
 
     protected:
       ParameterHandler prm;
@@ -112,7 +111,6 @@ namespace Step35
       , vel_diag_strength(0.01)
       , verbose(true)
       , output_interval(15)
-      , norm(true)
     {
       prm.declare_entry("Method_Form",
                         "rotational",
@@ -201,11 +199,6 @@ namespace Step35
                         Patterns::Integer(1),
                         " This indicates between how many time steps we print "
                         "the solution. ");
-                
-      prm.declare_entry("norm",
-                        "true",
-                        Patterns::Bool(),
-                        " This indicates whether the normalized adaptive time step is used. ");
     }
 
     void Data_Storage::read_data(const std::string &filename)
@@ -255,8 +248,6 @@ namespace Step35
       verbose = prm.get_bool("verbose");
 
       output_interval = prm.get_integer("output_interval");
-
-      norm = prm.get_bool("norm");
     }
   } // namespace RunTimeParameters
 
@@ -390,7 +381,7 @@ namespace Step35
   public:
     NavierStokesProjection(const RunTimeParameters::Data_Storage &data);
 
-    void run(const bool verbose = false, const unsigned int n_plots = 10, const bool norm = true);
+    void run(const bool verbose = false, const unsigned int n_plots = 10);
 
   protected:
     RunTimeParameters::Method type;
@@ -467,7 +458,7 @@ namespace Step35
     void update_pressure(const bool reinit_prec);
 
     // Function to estimate the time step
-    double estimate_time_step(const Vector<double> u_n[dim], const Vector<double> u_n_minus_1[dim], const double &dt, const bool norm);
+    double estimate_time_step(const Vector<double> u_n[dim], const Vector<double> u_n_minus_1[dim], const double &dt);
 
     // Function to save the time step values in a csv file
     void save_time_steps_to_csv(const std::string &filename) const;
@@ -858,7 +849,7 @@ namespace Step35
 
   // Function to estimate the time step
   template <int dim>
-  double NavierStokesProjection<dim>::estimate_time_step(const Vector<double> u_n[dim], const Vector<double> u_n_minus_1[dim], const double &dt, const bool norm)
+  double NavierStokesProjection<dim>::estimate_time_step(const Vector<double> u_n[dim], const Vector<double> u_n_minus_1[dim], const double &dt)
   {
     double TOL = 0.1; // Tolerance value
     double alpha = 0.5; // Parameter in the range (0,1]
@@ -900,23 +891,17 @@ namespace Step35
     // Debugging information
     //std::cout << "Time error indicator = " << time_error_indicator << std::endl;
     //std::cout << "Normalization = " << normalization << std::endl;
-
-    // Set the normalization factor to 1 if the unnormalized adaptive time step is used
-    if (!norm)
-    {
-      normalization = 1.;
-    }
       
     // Compute the next time step value based on the error indicator
     if (time_error_indicator > (normalization*((1.+alpha)*(1.+alpha))*TOL*TOL))
       {
         double den1 = std::sqrt(normalization)*(TOL*TOL)*(1.+alpha/2)*(1.+alpha/2);
-        return dt / std::min(2., time_error_indicator/den1);
+        return std::max(dt / std::min(2., time_error_indicator/den1), 0.0001);
       }
     else if (time_error_indicator < (normalization*((1.-alpha)*(1.-alpha))*TOL*TOL))
       {
         double den2 = std::sqrt(normalization)*(TOL*TOL)*(1.-alpha/2)*(1.-alpha/2);
-        return dt / std::max(0.5, time_error_indicator/den2);
+        return std::min(dt / std::max(0.5, time_error_indicator/den2), 0.1);
       }
     else
       return dt;
@@ -949,8 +934,7 @@ namespace Step35
   // This is the time marching function
   template <int dim>
   void NavierStokesProjection<dim>::run(const bool         verbose,
-                                        const unsigned int output_interval,
-                                        const bool         norm)
+                                        const unsigned int output_interval)
   {
     ConditionalOStream verbose_cout(std::cout, verbose);
 
@@ -989,7 +973,7 @@ namespace Step35
         vel_exact.advance_time(dt);
 
         // Estimate the new time step
-        double new_dt = estimate_time_step(u_n, u_n_minus_1, dt, norm);
+        double new_dt = estimate_time_step(u_n, u_n_minus_1, dt);
         dt = new_dt;
         dt_values.push_back(dt); // Store the time step value
 
@@ -1377,14 +1361,10 @@ int main()
       deallog.depth_console(data.verbose ? 2 : 0);
 
       std::cout << "Adaptive time-step version of the code" << std::endl;
-      if (data.norm)
-        std::cout << "Using normalized adaptive time step estimator" << std::endl;
-      else
-        std::cout << "Using unnormalized adaptive time step estimator" << std::endl;
       std::cout << "--------------------------------------" << std::endl;
 
       NavierStokesProjection<2> test(data);
-      test.run(data.verbose, data.output_interval, data.norm);
+      test.run(data.verbose, data.output_interval);
     }
   catch (std::exception &exc)
     {

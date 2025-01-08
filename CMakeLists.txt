@@ -1,13 +1,7 @@
 # Set the name of the project and target:
 set(TARGET "adaptive_NS")
 
-# Declare all source files the target consists of. Here, this is only
-# the one step-X.cc file, but as you expand your project you may wish
-# to add other source files as well. If your project becomes much larger,
-# you may want to either replace the following statement by something like
-#  file(GLOB_RECURSE TARGET_SRC  "source/*.cc")
-#  file(GLOB_RECURSE TARGET_INC  "include/*.h")
-#  set(TARGET_SRC ${TARGET_SRC}  ${TARGET_INC})
+# Declare all source files the target consists of.
 set(TARGET_SRC
   ${TARGET}.cc
   )
