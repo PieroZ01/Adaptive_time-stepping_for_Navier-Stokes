@@ -124,7 +124,9 @@ This approach, discussed in the works of Berrone and Marro [<a href="#ref2">2</a
 The following quantity has been used as a time error indicator in this project:
 
 $$
-(\eta^n)^2 = \sum_{K\in\mathcal{T}_h} \left( \int_{t^{n-1}}^{t^n} \left(||\nabla\left(u_h^{n}-u_h^{n-1}\right)||^2_{L^2(K)}\right)dt \right)
+\begin{equation*}
+    (\eta^n)^2 = \sum_{K\in\mathcal{T}_h} \left( \int_{t^{n-1}}^{t^n} \left(||\nabla\left(u_h^{n}-u_h^{n-1}\right)||^2_{L^2(K)}\right)dt \right)
+\end{equation*}
 $$
 
 where $\mathcal{T}_h$ is the mesh, $u_h^n$ is the solution at time $t^n$ and $u_h^{n-1}$ is the solution at time $t^{n-1}$. The time error indicator $\eta^n$ allows to evaluate the quality of the time step size $\Delta t^n$ according to the following principles: if $\eta^n$ is large, the time step size $\Delta t^n$ is too large and should be reduced; otherwise if $\eta^n$ is small, the time step size $\Delta t^n$ is too small and should be increased.
