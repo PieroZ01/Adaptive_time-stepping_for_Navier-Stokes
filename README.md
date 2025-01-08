@@ -125,7 +125,7 @@ The following quantity has been used as a time error indicator in this project:
 
 $$
 \begin{equation*}
-    (\eta^n)^2 = \sum_{K\in\mathcal{T}_h} \left( \int_{t^{n-1}}^{t^n} \left(||\nabla\left(u_h^{n}-u_h^{n-1}\right)||^2_{L^2(K)}\right)dt \right)
+    (\eta^n)^2 = \sum_{K\in T_h} \left( \int_{t^{n-1}}^{t^n} \left(||\nabla\left(u_h^{n}-u_h^{n-1}\right)||^2_{L^2(K)}\right)dt \right)
 \end{equation*}
 $$
 
