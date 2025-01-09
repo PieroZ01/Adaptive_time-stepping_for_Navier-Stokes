@@ -213,10 +213,111 @@ The program will start the simulation and progressively output the results; when
 
 ## Results
 
+In this section, the results of some simulations are presented and discussed. The simulations were performed using the adaptive time-stepping algorithm implemented in this project and described in the previous sections <a href="#adaptive-time-stepping-algorithm">here</a>. The objective of these simulations was to analyze the behavior of the adaptive time-stepping algorithm applied to the employed projection method and its impact on the accuracy and the efficiency of the simulations. Finally, the simulations were performed for different Reynolds numbers and different refinement levels of the mesh, in order to study the behavior of the adaptive time-stepping algorithm in different scenarios.
+
 ### Test Case
+
+The test case that has been used for the simulations consists of the **flow around a square obstacle in a channel**, which is actually the same presented in the Step-35 tutorial of the deal.II library <a href="#ref1">[1]</a>., which was used as a reference for the development of this project. The geometry of the test case is defined in the `nsbench.inp` file and is shown in the following figure:
+
+<p align="center">
+    <img src="images/test_geometry.png" alt="Geometry of the test case" width="700">
+</p>
+
+No slip boundary conditions were applied on both the top and bottom walls of the channel and the obstacle, while on the left side of the channel the following inflow boundary condition was imposed:
+
+$$
+u = \begin{cases}
+    4U_my\frac{(H-y)}{H^2} \\
+    0
+\end{cases}
+$$
+
+with $U_m=1.5$ and $H=4.1$ (the height of the channel). Finally, on the right side of the channel, the condition that the vertical velocity component and the pressure should both be zero was imposed.
+
+As mentioned before, the simulations were performed for **different refinement levels** of the mesh: specifically, the mesh was subjected to two refinement levels, which are denoted as `level1` and `level2`. The `level1` mesh is the coarsest mesh ($960$ active cells), where $2$ uniform refinements (`refine_global` function of deal.II) were applied to the initial mesh, while the `level2` mesh is the finest mesh ($3840$ active cells), where $3$ uniform refinements were applied to the initial mesh. The following figures show the `level1` and `level2` meshes:
+
+
+<p align="center">
+    <img src="images/2_ref_levels.png" alt="Mesh level 1" width="700">
+    <p align="center">Level 1 Refinement</p>
+</p>
+
+<p align="center">
+    <img src="images/3_ref_levels.png" alt="Mesh level 2" width="700">
+    <p align="center">Level 2 Refinement</p>
+</p>
+
+The simulations were performed for **different Reynolds numbers**, which were set to $Re=50$, $Re=100$ and $Re=200$. The simulations were run for a final time of $T=40$ and the initial time step size was set to $\Delta t_0=0.001$. The output frequency was set to `output_interval=20`, which means that the results were saved every $20$ time steps. The rest of the parameters were set to the values specified in the `parameter-file.prm` file.
+
+### Simulation Results
+
+Here we present the results of the simulation performed for the `level2` mesh for the Reynolds number $Re=100$. The following animation shows the evolution of the velocity magnitude field during the simulation:
+
+<p align="center">
+    <img src="images/sol.gif" alt="Velocity magnitude field" width="700">
+</p>
+
+The development and extension of a vortex chain behind the obstacle can be observed: the flow is characterized by the formation of vortices and the shedding of vortices downstream of the obstacle. The simulation captures the main features of the flow around the obstacle and the evolution of the vortices in the channel. To better visualize these vortices and the flow structures, the following animation shows the velocity field with a *Line Integral Convolution (LIC)* filter applied:
+
+<p align="center">
+    <img src="images/sol_LIC.gif" alt="Velocity field with LIC filter" width="700">
+</p>
+
+The LIC filter enhances the visualization of the flow structures and the vortices, making them more visible and highlighting the dynamics of the flow.
+
+The `data` folder contains the results of all the simulations performed for the different Reynolds numbers and refinement levels of the mesh. The results include the velocity and pressure fields and the vorticity field at different time steps of the simulation. The results were saved in the `vtk` format and can be visualized using a software that supports this format, such as `ParaView`. For each simulation, the `time_steps.csv` file containing the time step size evolution during the simulation is also provided.
+
+### Adaptive Time-Stepping Analysis
+
+The `time-step_analysis.ipynb` Jupyter notebook was used to analyze the time step size evolution during the simulations. The notebook reads the different `time_steps.csv` files and plots the time step size evolution over time, as well as over the number of time steps, for each simulation.
+
+We will first provide some plots and then discuss the results of the analysis.
+
+The following figure shows the time step size evolution during two simulations performed with Reynolds number $Re=100$ and the `level1` and `level2` meshes respectively:
+
+<p align="center">
+    <img src="images/Ref_Level_Comp.png" alt="Time step size evolution" width="700">
+</p>
+
+On the other hand, the following figure shows the time step size evolution during the simulations performed for the different Reynolds numbers and the `level2` mesh, specifically for $Re=50$, $Re=100$ and $Re=200$:
+
+<p align="center">
+    <img src="images/Re_Comp.png" alt="Time step size evolution" width="700">
+</p>
+
+#### General Observations
+
+It can be noticed that the time step size evolution is different for the different Reynolds numbers and refinement levels of the mesh. However, a general time step behavior can be observed: 
+
+- initially, the time step size decreases, reflecting the initialization of the simulation where transient effects are present and the solution is evolving rapidly; this decrease is not very evident in these plots, but can be observed in the results of the simulations in the `time_steps.csv` files, as well as in the *log* plot of the time step size evolution provided in the notebook. This first short phase corresponds to the need to adapt the time step size to capture the rapid evolution in the flow dynamics;
+- as the simulation progresses, the time step size increases, reflecting the stabilization of the flow and its transition to a developing state: the transient effects are reduced and the flow becomes more stable, allowing for larger time step sizes to be used;
+- as vortex shedding occurs and the flow structures start to form, the time step size decreases again, reflecting the need to capture the rapid changes in the solution and the flow dynamics; the time step size subsequently oscillates around a certain value, finally stabilizing into a sort of periodic trend as vortices form and propagate downstream. The oscillations in the time step size become more regular, mirroring the periodicity of the flow structures and the whole physical flow.
+  
+Overall, the adaptive time-stepping algorithm successfully adjusts the time step size during the simulation, following the time evolution of the solution and the physical flow dynamics.
+
+#### Effect of the Grid Refinement
+
+The effect of the grid refinement on the time step size evolution can be observed in the first plot: the time step size is generally smaller for the `level2` mesh than for the `level1` mesh, reflecting the need to capture the flow structures and the vortices with a higher resolution when using a finer grid. In the case of the `level2` mesh, the smaller time step size reflects the increased sensitivity of the simulation to gradients and vortex structures, which require a finer mesh to be resolved accurately. On the other hand, the `level1` coarser mesh allows for larger time step sizes; moreover, the trend of the time step size evolution is smoother, more stable and less fluctuating, indicating the lower resolution of the mesh and the reduced sensitivity of the simulation to the flow structures.
+
+#### Effect of the Reynolds Number
+
+The effect of the Reynolds number on the time step size evolution can be observed in the second plot: the time step size is generally smaller for higher Reynolds numbers. In fact, as $Re$ increases, the flow becomes more turbulent and the vortices form and propagate more rapidly, requiring a smaller time step size to capture the rapid changes in the solution and the flow dynamics. The time step size is larger for lower Reynolds numbers, reflecting the smoother and less turbulent flow, which evolves more slowly and requires a larger time step size to be resolved accurately enough. The increased oscillatory behavior of the time step size which can be observed for higher Reynolds numbers aligns with the physical flow exhibiting more pronounced vortex shedding, which introduces greater variability in the flow dynamics and the solution over time. Overall, the periodicity of the time step size evolution aligns with the vortex shedding frequency, which is higher for higher Reynolds numbers and lower for lower Reynolds numbers.
+
+### Consistency with the Expected Behavior
+
+All these observations are consistent with the expected behavior of the adaptive time-stepping algorithm, confirming its effectiveness in adjusting the time step size during the simulation to ensure accuracy and efficiency. In fact, the time step size is dynamically modified reflecting the time evolution of the physical flow: it is reduced when the solution is evolving rapidly and the flow structures are forming, and it is increased when the flow is more stable and the solution is changing less, optimizing the computational efficiency of the simulation, without compromising the accuracy of the results. As expected, finer grid refinements and higher Reynolds numbers require smaller time step sizes, due to the increased sensitivity to flow details and the faster dynamics, respectively.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Conclusions
 
+In this project, an **adaptive time-stepping algorithm** for solving the incompressible Navier-Stokes equations with a finite element method using the deal.II library was implemented. The adaptive time-stepping algorithm effectively adjusts the time step size at each time step of the simulation based on a time error indicator, which is used to determine the optimal time step size for the next time step. The time step size is dynamically modified during the simulations, following the time evolution of the solution and the physical flow dynamics, ensuring accuracy and efficiency of the simulations. 
+
+The adaptive time-stepping algorithm was successfully implemented and tested for different Reynolds numbers and refinement levels of the mesh, providing evidence of its effectiveness in controlling the time step size and optimizing the computational efficiency of the simulations. Finally, the results of the simulations were analyzed and discussed, confirming the consistency of the adaptive time-stepping algorithm with the expected behavior and its ability to adapt the time step size to the time evolution of the solution and the physical flow.
+
+In conclusion, it's important to underline the fact that the analysis of the computed time step size  during the simulations can help to better identify different phases of the development of the flow.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
 ## License

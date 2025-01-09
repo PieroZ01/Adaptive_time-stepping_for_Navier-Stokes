@@ -14,7 +14,7 @@ end
 subsection Time step data
   # In this subsection we declare the data that is to be used for time discretization,
   # i.e. the initial time step dt
-  set dt = 1e-3 # (was 5e-3)
+  set dt = 1e-3
 end
 
 subsection Space discretization
