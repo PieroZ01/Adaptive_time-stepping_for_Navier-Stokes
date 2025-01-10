@@ -47,7 +47,7 @@
 
 ### Project Objective
 
-The aim of this project is to implement an **adaptive time-stepping algorithm** for solving the incompressible Navier-Stokes equations with a finite element method using the [deal.II](https://www.dealii.org) library. The project is developed as the final project for the *Advanced Topics in Scientific Computing* course of the *<a href="https://sdic.units.it">SDIC</a>* Master Degree at the *University of Trieste (UniTS)* and *SISSA* for the academic year 2024-2025.
+The aim of this project is to implement an **adaptive time-stepping algorithm** for solving the incompressible Navier-Stokes equations with a finite element method using the [deal.II](https://www.dealii.org) library. The project is developed as the final project for the *Advanced Topics in Scientific Computing* course of the *Scientific and Data-Intensive Computing* Master Degree at the *University of Trieste (UniTS)* and *SISSA* for the academic year 2024-2025.
 
 ### Introduction
 
