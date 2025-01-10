@@ -129,7 +129,7 @@ $$
 \end{equation*}
 $$
 
-where $T_h$ is the mesh, $u_h^n$ is the solution at time $t^n$ and $u_h^{n-1}$ is the solution at time $t^{n-1}$. The time error indicator $\eta^n$ allows to evaluate the quality of the time step size $\Delta t^n$ according to the following principles: if $\eta^n$ is large, the time step size $\Delta t^n$ is too large and should be reduced; otherwise if $\eta^n$ is small, the time step size $\Delta t^n$ is too small and should be increased.
+where $T_h$ is the mesh, $u_h^n$ is the solution at time $t^n$ and $u_h^{n-1}$ is the solution at time $t^{n-1}$. The time error indicator $\eta^n$ allows to evaluate the quality of the time step size $\Delta t^n$ according to the following principles: if $\eta^n$ is large, the time step size $\Delta t^n$ is too large and should be reduced; otherwise, if $\eta^n$ is small, the time step size $\Delta t^n$ is too small and should be increased.
 
 The following term has been introduced to normalize the time error indicator:
 
