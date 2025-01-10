@@ -149,7 +149,7 @@ $$
 
 where $\text{TOL}>0$ is a given tolerance and $\alpha$ is a parameter in the range $(0,1]$. Specifically, the tolerance was set to $\text{TOL}=0.1$ and the parameter $\alpha$ was set to $\alpha=0.5$ in this project.
 
-If the double inequality (1) is satisfied, the current time step size $\Delta t^n$ is accepted and is kept for the next time step. Otherwise, the time step size is modified according to the following rule: it is reduced if the time error indicator exceeds the upper bound and it is increased if it is below the lower bound. In particular, the optimal time step size $\Delta t_{\text{opt}}$ for the next time step is computed as:
+If the double inequality is satisfied, the current time step size $\Delta t^n$ is accepted and is kept for the next time step. Otherwise, the time step size is modified according to the following rule: it is reduced if the time error indicator exceeds the upper bound and it is increased if it is below the lower bound. In particular, the optimal time step size $\Delta t_{\text{opt}}$ for the next time step is computed as:
 
 $$
 \begin{equation*}
