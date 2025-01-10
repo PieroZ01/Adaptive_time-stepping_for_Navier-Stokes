@@ -207,7 +207,7 @@ The parameters in the `parameter-file.prm` file can be modified to change the se
 ./adaptive_NS
 ```
 
-The program will start the simulation and progressively output the results; when running, the code will output the current step of the simulation, the current time and the current time step size. The results of the simulations include the velocity and pressure fields and the vorticity field every `output_interval` time steps, as specified in the `parameter-file.prm` file. The program will also save in the `time_steps.csv` file the time step size evolution during the simulation, which can be later analyzed and plotted using the `time-step_analysis.ipynb` Jupyter notebook.
+The program will start the simulation and progressively output the results; when running, the code will output to the terminal the current step of the simulation, the current time and the current time step size. The results of the simulations include the velocity and pressure fields and the vorticity field every `output_interval` time steps, as specified in the `parameter-file.prm` file. The program will also save in the `time_steps.csv` file the time step size evolution during the simulation, which can be later analyzed and plotted using the `time-step_analysis.ipynb` Jupyter notebook.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
