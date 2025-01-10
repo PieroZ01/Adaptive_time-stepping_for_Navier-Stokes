@@ -177,7 +177,7 @@ $$
 
 This choice of $\rho_1$ and $\rho_2$ ensures that the time step size is not increased or decreased by more than a factor of 2 at each time step, in order to avoid too large variations in the time step size, which could lead to instabilities in the simulation. Additionally, the time step size is bounded by a minimum and a maximum value, which are set to $\Delta t_{\text{min}}=10^{-4}$ and $\Delta t_{\text{max}}=0.1$ in this project.
 
-For more details on the specific implementation of the adaptive time-stepping algorithm in this project, please refer to the `adaptive_NS.cc` file, where the code is commented and explained in detail.
+For more details on the specific implementation of the adaptive time-stepping algorithm in this project, please refer to the `adaptive_NS.cc` file.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
