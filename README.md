@@ -320,6 +320,10 @@ In conclusion, it's important to underline the fact that the analysis of the com
 
 Overall, the adaptive time-stepping algorithm can be a valuable tool for controlling the time step size and optimizing the computational efficiency of the simulations, ensuring that the solution is accurate and the computational costs are optimized.
 
+### Possible Future Extensions
+
+This project could be extended adding to the adaptive time-stepping algorithm also an **adaptive mesh refinement** technique, which could further improve the accuracy of the simulations, while not significantly increasing their computational costs.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
