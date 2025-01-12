@@ -75,10 +75,9 @@ The project is structured as follows:
 │   ├── Re200_norm_level2
 │   └── Re50_norm_level2
 ├── images # Folder containing some images
-│   ├── sol.gif
-│   └── sol_LIC.gif
 ├── nsbench.inp # Input file containing the geometry of the test case
 ├── parameter-file.prm # Input file containing the parameters for the simulations
+├── presentation # Folder containing the slides of the presentation of the project
 ├── time-step_analysis.ipynb # Jupyter notebook for analyzing the time step size evolution during the simulations
 └── time_steps.csv # CSV file for saving the time step size evolution during a simulation
 ```
